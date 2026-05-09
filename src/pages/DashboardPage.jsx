@@ -108,9 +108,6 @@ export default function DashboardPage() {
       {/* 収支追加フォーム */}
       <QuickAddForm />
 
-      {/* レシートスキャン */}
-      <ReceiptScanner />
-
       {/* AI デイリーブリーフィング */}
       <div className="briefing-card">
         <div className="briefing-icon">🤖</div>
@@ -196,6 +193,9 @@ export default function DashboardPage() {
           </ul>
         </div>
       </div>
+
+      {/* レシートスキャン */}
+      <ReceiptScanner />
     </div>
   )
 }
