@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useAppContext } from '../AppContext'
 import { useInsights } from '../hooks/useInsights'
 
@@ -6,6 +7,82 @@ const INSIGHT_META = {
   positive:   { label: '✅ 好調', colorClass: 'insight-positive' },
   suggestion: { label: '💡 提案', colorClass: 'insight-suggestion' },
   prediction: { label: '📈 予測', colorClass: 'insight-prediction' },
+}
+
+const CATEGORIES = {
+  income:  ['給与', '副収入', '賞与', '投資', 'その他収入'],
+  expense: ['住居費', '食費', '交通費', '光熱費', '娯楽費', '医療費', '衣服費', 'その他'],
+}
+
+const today = new Date().toISOString().slice(0, 10)
+
+function QuickAddForm() {
+  const { addTransaction } = useAppContext()
+  const [type, setType] = useState('expense')
+  const [amount, setAmount] = useState('')
+  const [category, setCategory] = useState(CATEGORIES.expense[0])
+  const [description, setDescription] = useState('')
+  const [date, setDate] = useState(today)
+  const [done, setDone] = useState(false)
+
+  const handleTypeChange = (t) => {
+    setType(t)
+    setCategory(CATEGORIES[t][0])
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const num = parseInt(amount, 10)
+    if (!num || num <= 0) return
+    addTransaction({ type, amount: num, category, description: description.trim(), date })
+    setAmount('')
+    setDescription('')
+    setDate(today)
+    setDone(true)
+    setTimeout(() => setDone(false), 2000)
+  }
+
+  return (
+    <div className="quick-add-card">
+      <h2 className="section-title">収支を追加</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="type-toggle" style={{ marginBottom: 12 }}>
+          <button type="button" className={`type-btn ${type === 'income' ? 'type-income' : ''}`} onClick={() => handleTypeChange('income')}>収入</button>
+          <button type="button" className={`type-btn ${type === 'expense' ? 'type-expense' : ''}`} onClick={() => handleTypeChange('expense')}>支出</button>
+        </div>
+        <div className="quick-add-fields">
+          <input
+            className="tx-input"
+            type="number"
+            placeholder="金額（円）"
+            value={amount}
+            onChange={e => setAmount(e.target.value)}
+            min="1"
+            required
+          />
+          <select className="tx-select" value={category} onChange={e => setCategory(e.target.value)}>
+            {CATEGORIES[type].map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+          <input
+            className="tx-input"
+            type="text"
+            placeholder="メモ（任意）"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+          />
+          <input
+            className="tx-input"
+            type="date"
+            value={date}
+            onChange={e => setDate(e.target.value)}
+          />
+          <button className="btn-primary" type="submit" style={{ whiteSpace: 'nowrap' }}>
+            {done ? '✓ 追加済み' : '追加'}
+          </button>
+        </div>
+      </form>
+    </div>
+  )
 }
 
 export default function DashboardPage() {
@@ -73,6 +150,9 @@ export default function DashboardPage() {
           )
         })}
       </div>
+
+      {/* 収支追加フォーム */}
+      <QuickAddForm />
 
       <div className="bottom-grid">
         {/* 未完了タスク */}

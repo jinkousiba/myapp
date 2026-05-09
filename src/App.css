@@ -162,6 +162,16 @@
 .task-delete { color: var(--text-muted); font-size: 14px; padding: 4px 8px; border-radius: 4px; transition: color 0.15s, background 0.15s; }
 .task-delete:hover { color: var(--expense-color); background: #fee2e2; }
 
+/* ── Quick Add Form (Dashboard) ──────────────────── */
+.quick-add-card {
+  background: var(--surface); border-radius: var(--radius); padding: 18px;
+  margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.quick-add-fields {
+  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+}
+.quick-add-fields .tx-input { flex: 1; min-width: 110px; }
+
 /* ── Accounting page ─────────────────────────────── */
 .balance-badge { background: var(--primary-light); color: var(--primary-dark); padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 15px; }
 
