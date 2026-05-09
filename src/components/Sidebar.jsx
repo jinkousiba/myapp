@@ -6,14 +6,25 @@ const NAV_ITEMS = [
   { key: 'accounting', label: '収支管理', icon: '💰' },
 ]
 
-export default function Sidebar() {
+export default function Sidebar({ sidebarOpen, onClose, onNavigate }) {
   const { currentPage, setCurrentPage, summary } = useAppContext()
 
+  const handleNav = (key) => {
+    setCurrentPage(key)
+    onNavigate?.()
+  }
+
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
       <div className="sidebar-header">
-        <div className="logo">MyApp</div>
-        <div className="logo-sub">AIアドバイザー</div>
+        <div className="sidebar-header-row">
+          <div>
+            <div className="logo">MyApp</div>
+            <div className="logo-sub">AIアドバイザー</div>
+          </div>
+          {/* モバイル用閉じるボタン */}
+          <button className="sidebar-close" onClick={onClose}>✕</button>
+        </div>
       </div>
 
       <nav className="sidebar-nav">
@@ -21,7 +32,7 @@ export default function Sidebar() {
           <button
             key={item.key}
             className={`nav-item ${currentPage === item.key ? 'active' : ''}`}
-            onClick={() => setCurrentPage(item.key)}
+            onClick={() => handleNav(item.key)}
           >
             <span className="nav-icon">{item.icon}</span>
             <span>{item.label}</span>

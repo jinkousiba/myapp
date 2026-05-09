@@ -15,7 +15,7 @@ function buildSystem(summary, tasks, transactions) {
 ユーザーデータ:
 - 収入: ${summary.totalIncome.toLocaleString()}円 / 支出: ${summary.totalExpense.toLocaleString()}円 / 残高: ${summary.balance.toLocaleString()}円
 - タスク: 全${summary.totalTasks}件中${summary.completedTasks}件完了
-- 未完了タスク: ${tasks.filter(t => !t.completed).map(t => t.title).join('、')}
+- 未完了タスク: ${tasks.filter(t => !t.completed).map(t => t.title).join('、') || 'なし'}
 日本語で簡潔に答えてください。`
 }
 
@@ -27,8 +27,7 @@ async function generateFeed(system) {
     { kind: 'alert', p: '放置気味のタスクに関するアラートを1つ40文字以内で教えてください。' },
     { kind: 'positive', p: '財務面での改善ポイントを1つ40文字以内で褒めてください。' },
   ]
-
-  const results = await Promise.all(
+  return Promise.all(
     prompts.map(async ({ kind, p }, i) => {
       try {
         const text = await callClaude({ system, prompt: p, maxTokens: 100 })
@@ -38,10 +37,9 @@ async function generateFeed(system) {
       }
     })
   )
-  return results
 }
 
-export default function AIFeedPanel() {
+export default function AIFeedPanel({ open, onClose }) {
   const { summary, tasks, transactions } = useAppContext()
   const [feed, setFeed] = useState(MOCK_FEED)
   const [loading, setLoading] = useState(false)
@@ -50,8 +48,7 @@ export default function AIFeedPanel() {
     setLoading(true)
     try {
       const system = buildSystem(summary, tasks, transactions)
-      const items = await generateFeed(system)
-      setFeed(items)
+      setFeed(await generateFeed(system))
     } finally {
       setLoading(false)
     }
@@ -61,12 +58,15 @@ export default function AIFeedPanel() {
   const kindClass = { alert: 'feed-alert', positive: 'feed-positive', neutral: 'feed-neutral' }
 
   return (
-    <aside className="ai-feed-panel">
+    <aside className={`ai-feed-panel ${open ? 'feed-panel-open' : ''}`}>
       <div className="feed-header">
-        <span>スマートフィード</span>
-        <button className="feed-refresh-btn" onClick={refresh} disabled={loading}>
-          {loading ? '更新中…' : '更新'}
-        </button>
+        <span>🤖 スマートフィード</span>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="feed-refresh-btn" onClick={refresh} disabled={loading}>
+            {loading ? '更新中…' : '更新'}
+          </button>
+          <button className="feed-close-btn" onClick={onClose}>✕</button>
+        </div>
       </div>
 
       <div className="feed-list">
@@ -79,9 +79,7 @@ export default function AIFeedPanel() {
         ))}
       </div>
 
-      <div className="feed-footer">
-        AIが自律的に生成 · claude-sonnet-4-6
-      </div>
+      <div className="feed-footer">AIが自律的に生成 · claude-sonnet-4-6</div>
     </aside>
   )
 }
