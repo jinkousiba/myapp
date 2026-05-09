@@ -21,7 +21,7 @@ function QuickAddForm() {
   const { addTransaction } = useAppContext()
   const [type, setType] = useState('expense')
   const [amount, setAmount] = useState('')
-  const [category, setCategory] = useState(CATEGORIES.expense[0])
+  const [category, setCategory] = useState('食費')
   const [description, setDescription] = useState('')
   const [date, setDate] = useState(today)
   const [done, setDone] = useState(false)
