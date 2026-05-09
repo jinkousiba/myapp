@@ -104,6 +104,9 @@ export default function DashboardPage() {
         </button>
       </div>
 
+      {/* 収支追加フォーム */}
+      <QuickAddForm />
+
       {/* AI デイリーブリーフィング */}
       <div className="briefing-card">
         <div className="briefing-icon">🤖</div>
@@ -150,9 +153,6 @@ export default function DashboardPage() {
           )
         })}
       </div>
-
-      {/* 収支追加フォーム */}
-      <QuickAddForm />
 
       <div className="bottom-grid">
         {/* 未完了タスク */}
