@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAppContext } from '../AppContext'
 import { useInsights } from '../hooks/useInsights'
+import ReceiptScanner from '../components/ReceiptScanner'
 
 const INSIGHT_META = {
   warning:    { label: '⚠️ 注意', colorClass: 'insight-warning' },
@@ -106,6 +107,9 @@ export default function DashboardPage() {
 
       {/* 収支追加フォーム */}
       <QuickAddForm />
+
+      {/* レシートスキャン */}
+      <ReceiptScanner />
 
       {/* AI デイリーブリーフィング */}
       <div className="briefing-card">

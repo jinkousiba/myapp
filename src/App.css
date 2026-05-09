@@ -252,6 +252,125 @@
 .tx-amount.income { color: var(--income-color); }
 .tx-amount.expense { color: var(--expense-color); }
 
+/* ── Receipt Scanner ─────────────────────────────── */
+.receipt-scanner-card {
+  background: var(--surface); border-radius: var(--radius);
+  padding: 16px; margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.drop-zone {
+  border: 2px dashed var(--border); border-radius: 10px;
+  padding: 28px 16px; text-align: center; cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  margin-bottom: 12px;
+}
+.drop-zone:hover, .drop-zone.drag-over {
+  border-color: var(--primary); background: var(--primary-light);
+}
+.drop-zone.has-files { padding: 12px; }
+.drop-icon { font-size: 36px; margin-bottom: 8px; }
+.drop-text { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.drop-sub { font-size: 12px; color: var(--text-muted); }
+
+.preview-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 8px; cursor: default;
+}
+.preview-item {
+  position: relative; border-radius: 6px; overflow: hidden;
+  aspect-ratio: 3/4; background: var(--bg);
+}
+.preview-item img { width: 100%; height: 100%; object-fit: cover; }
+.preview-remove {
+  position: absolute; top: 4px; right: 4px;
+  background: rgba(0,0,0,0.6); color: #fff;
+  border-radius: 50%; width: 20px; height: 20px;
+  font-size: 10px; display: flex; align-items: center; justify-content: center;
+}
+.preview-add {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border: 2px dashed var(--border); border-radius: 6px; aspect-ratio: 3/4;
+  cursor: pointer; color: var(--text-muted); font-size: 12px; gap: 4px;
+  transition: border-color 0.15s;
+}
+.preview-add:hover { border-color: var(--primary); color: var(--primary); }
+.preview-add span:first-child { font-size: 20px; }
+
+.btn-scan {
+  width: 100%; padding: 12px; border-radius: 8px;
+  background: var(--primary); color: #fff;
+  font-size: 15px; font-weight: 700;
+  transition: background 0.15s; margin-bottom: 8px;
+}
+.btn-scan:hover:not(:disabled) { background: var(--primary-dark); }
+.btn-scan:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.scan-progress {
+  height: 4px; background: var(--primary-light); border-radius: 2px;
+  overflow: hidden; margin-bottom: 12px;
+}
+.scan-bar {
+  height: 100%; background: var(--primary); border-radius: 2px;
+  animation: scan-anim 1.2s ease-in-out infinite;
+  width: 40%;
+}
+@keyframes scan-anim {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+.results-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+}
+.results-label { font-size: 13px; font-weight: 600; }
+.results-count { font-size: 12px; color: var(--primary); font-weight: 600; }
+
+.receipt-results { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+
+.receipt-result-card {
+  border: 1.5px solid var(--border); border-radius: 8px; padding: 12px;
+  transition: opacity 0.15s;
+}
+.receipt-result-card.result-error { border-color: #fca5a5; background: #fff1f1; }
+.receipt-result-card.result-unchecked { opacity: 0.5; }
+
+.receipt-result-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
+}
+.receipt-checkbox { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.receipt-checkbox input { width: 16px; height: 16px; accent-color: var(--primary); }
+.receipt-filename { font-size: 12px; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px; }
+
+.receipt-error-msg { font-size: 13px; color: var(--expense-color); }
+
+.receipt-fields {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+.receipt-field-wide { grid-column: span 2; }
+.receipt-field { display: flex; flex-direction: column; gap: 4px; }
+.receipt-field label { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+.receipt-field input, .receipt-field select {
+  padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 6px;
+  font-size: 13px; font-family: inherit; outline: none; width: 100%;
+}
+.receipt-field input:focus, .receipt-field select:focus { border-color: var(--primary); }
+
+.btn-add-all {
+  width: 100%; padding: 12px; border-radius: 8px;
+  background: var(--income-color); color: #fff;
+  font-size: 15px; font-weight: 700; transition: background 0.15s;
+}
+.btn-add-all:hover:not(:disabled) { background: #15803d; }
+.btn-add-all:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.scan-success {
+  margin-top: 10px; padding: 10px 14px; border-radius: 8px;
+  background: #dcfce7; color: var(--income-color);
+  font-size: 14px; font-weight: 600; text-align: center;
+}
+
 /* ── Responsive ───────────────────────────────────── */
 @media (max-width: 768px) {
   .app-layout {
