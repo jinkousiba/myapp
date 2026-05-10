@@ -1,10 +1,14 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL
+const BASE_URL    = import.meta.env.VITE_API_BASE_URL
+const API_SECRET  = import.meta.env.VITE_API_SECRET
 
-export const isApiEnabled = !!BASE_URL
+export const isApiEnabled = !!BASE_URL && !!API_SECRET
 
 async function request(path, options = {}) {
   const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${API_SECRET}`,
+    },
     ...options,
   })
   if (!res.ok) throw new Error(`API error: ${res.status}`)
